@@ -6,24 +6,30 @@
 
 int main(int argc, char **argv){
 
-    float nclusters = 20;
+    float nclusters = 0.1;
 
     //Dictionary creation
     BagOfVisualWords* bag = (BagOfVisualWords *)malloc(sizeof(BagOfVisualWords));
     bag->directoryManager = loadDirectory("images/dict/", 1);
-    bag->vocabulary = computeFeatureVectors(bag->directoryManager, 64);
+    bag->vocabulary = computeFeatureVectors(bag->directoryManager, 32);
     printf("rows:%d cols:%d \n",bag->vocabulary->nFeaturesVectors,bag->vocabulary->featureVector[0]->size);
-    TrainingKnowledge* tr = kMeansClustering(bag->vocabulary, nclusters);
-    printf("rows:%d cols:%d \n", tr->dictionary->nFeaturesVectors,tr->dictionary->featureVector[0]->size);
-    //Fuse BagOfVisualWords and TrainingKnowledge?
+    VocabularyTraining* vr = kMeansClustering(bag->vocabulary, nclusters * bag->vocabulary->nFeaturesVectors);
+    printf("rows:%d cols:%d \n", vr->dictionary->nFeaturesVectors,vr->dictionary->featureVector[0]->size);
 
     //Training
     DirectoryManager* trainingDir = loadDirectory("images/training/", 1);
+    TrainingKnowledge* tk = createTrainingKnowledge((int)trainingDir->nfiles, bag->vocabulary->nFeaturesVectors);
     //for each images
-    //computeFeatureVectors
-    //for each descriptor found
-    //cmp with vocabulary
-    //sum each ocurrence to word histogram
+    for (int img = 0; img < (int)trainingDir->nfiles; ++img) {
+        Image* currentImage = readImage(trainingDir->files[img]->path);
+        tk = trainWithImage(img, currentImage, tk, vr);
+        printf("%s\n",trainingDir->files[img]->path);
+        for(int k=0; k < tk->nvocabulary; k++)
+            printf(" %d",tk->imageHistograms[img][k]);
+        printf("\n");
+        //Get label for given histogram
+        destroyImage(&currentImage);
+    }
 
     //Test
     DirectoryManager* testDir = loadDirectory("images/test/", 1);
@@ -35,18 +41,18 @@ int main(int argc, char **argv){
 
 
 
-    for (int i=0; i< tr->nlabels; i++)
-        printf("[%d] -> %d\n", i, tr->labels[i]);
 
-
-
-
+    for(int i = 0; i < tk->nlabels; i++)
+        free(tk->imageHistograms[i]);
+    free(tk->imageHistograms);
+    free(tk->labels);
+    free(tk);
     destroyFeatureMatrix(&bag->vocabulary);
     destroyDirectoryManager(&bag->directoryManager);
     free(bag);
-    destroyFeatureMatrix(&tr->dictionary);
-    free(tr->labels);
-    free(tr);
+    destroyFeatureMatrix(&vr->dictionary);
+    free(vr->labels);
+    free(vr);
     destroyDirectoryManager(&trainingDir);
     destroyDirectoryManager(&testDir);
 
