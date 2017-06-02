@@ -11,14 +11,14 @@ int main(int argc, char **argv){
     //Dictionary creation
     BagOfVisualWords* bag = (BagOfVisualWords *)malloc(sizeof(BagOfVisualWords));
     bag->directoryManager = loadDirectory("images/dict/", 1);
-    bag->vocabulary = computeFeatureVectors(bag->directoryManager, 32);
-    //printf("rows:%d cols:%d \n",bag->vocabulary->nFeaturesVectors,bag->vocabulary->featureVector[0]->size);
+    bag->vocabulary = computeFeatureVectors(bag->directoryManager, BINSIZE);
+    printf("Features total: rows:%d cols:%d \n",bag->vocabulary->nFeaturesVectors,bag->vocabulary->featureVector[0]->size);
     VocabularyTraining* vr = kMeansClustering(bag->vocabulary, nclusters * bag->vocabulary->nFeaturesVectors);
-    printf("rows:%d cols:%d \n", vr->dictionary->nFeaturesVectors,vr->dictionary->featureVector[0]->size);
+    printf("Centered features total: rows:%d cols:%d \n", vr->dictionary->nFeaturesVectors,vr->dictionary->featureVector[0]->size);
 
     //Training
     DirectoryManager* trainingDir = loadDirectory("images/training/", 1);
-    TrainingKnowledge* trainK = createTrainingKnowledge((int)trainingDir->nfiles, bag->vocabulary->nFeaturesVectors);
+    TrainingKnowledge* trainK = createTrainingKnowledge((int)trainingDir->nfiles, vr->dictionary->nFeaturesVectors);
     //for each images
     for (int i = 0; i < (int)trainingDir->nfiles; ++i) {
         Image* currentImage = readImage(trainingDir->files[i]->path);
@@ -26,10 +26,10 @@ int main(int argc, char **argv){
         //Get label for given histogram
         char *filename = strrchr(trainingDir->files[i]->path, '/');
         trainK->labels[i] = int(filename[4]);
-        //printf("%s\n",trainingDir->files[i]->path);
-        //for(int k=0; k < trainK->nvocabulary; k++)
-        //    printf(" %d",trainK->imageHistograms[i][k]);
-        //printf("\n");
+        printf("%s\n",trainingDir->files[i]->path);
+        for(int k=0; k < trainK->nvocabulary; k++)
+            printf(" %d",trainK->imageHistograms[i][k]);
+        printf("\n");
         destroyImage(&currentImage);
     }
 
