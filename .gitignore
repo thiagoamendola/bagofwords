@@ -1,0 +1,6 @@
+#ISF
+isf_demo/
+
+#Compressed files
+*.zip
+*tar.gz
