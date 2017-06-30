@@ -1,0 +1,45 @@
+COMPILER=$(CXX)
+#COMPILER = clang++
+
+#FLAGS= -g -O0 -Wall -Wno-unused-result -std=gnu99 -pedantic
+FLAGS=   -Wall -Wno-unused-result  -pedantic -Wno-write-strings -fsanitize=address -g -fopenmp
+#-std=gnu99
+
+FLLIBPNGINCLUDES=-I./libFL/externals/libpng/include
+FLLIBJPEGINCLUDES=-I./libFL/externals/libjpeg/include
+FLLIBTIFFINCLUDES=-I./libFL/externals/libtiff/include
+FLLIBSVMINCLUDES=-I./libFL/externals/libsvm/include
+
+FL=-L./libFL/lib -lFL
+LINKER=  $(FL)
+
+FLFLAGS=-I./libFL/include
+FLAGSIM=$(FLLIBPNGINCLUDES) $(FLLIBJPEGINCLUDES) $(FLLIBJPEGINCLUDES) $(FLLIBSVMINCLUDES) $(FLFLAGS) $(FLAGS)
+
+DEPS= common.h pointsOfInterest.h
+OBJ = common.o pointsOfInterest.o
+
+
+libFL:
+	(cd ../; $(MAKE) ; cd demo)
+
+%.o: %.c $(DEPS)
+	$(CC) -c $(FLAGSIM) $(CFLAGS) -o $@ $<
+
+main: libFL $(OBJ)
+	make
+	$(COMPILER) $(FLAGSIM) main.cpp $(FILES) -o main.bin  $(LINKER); \
+
+#Removing everything without an extension
+#clean:
+#	find . -type f -executable -exec rm '{}' \;
+
+clean:
+	rm *.bin ;
+
+
+cleanImages:
+	rm *.ppm *.pgm *.gif *.png *.jpg *.jpeg
+
+cleanText:
+	rm *.txt
