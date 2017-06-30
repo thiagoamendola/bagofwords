@@ -9,3 +9,5 @@ isf_demo/
 **/CMakeCache.txt
 **/CMakeFiles/
 Makefile
+
+*.DS_Store
