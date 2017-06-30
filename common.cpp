@@ -9,15 +9,13 @@ IntList* createIntList(int size){
     IntList* l = NULL;
 	l = (IntList*)calloc(1,sizeof(IntList));
 	l->size = 0;
-	l->val = (int**)calloc(size,sizeof(int*));
+	l->val = (int*)calloc(size,sizeof(int));
     return l;
 }
 
 //
 void pushIntList(IntList *l, int value){
-    int* v = NULL;
-	v = (int*)calloc(1,sizeof(int));
-	l->val[l->size] = v;
+	l->val[l->size] = value;
 	l->size += 1;
     return;
 }
@@ -27,9 +25,6 @@ void destroyIntList(IntList **l){
     if ( (*l) == NULL){
         return;
     }
-	for(int i=0; i<(*l)->size; i++){
-		free((*l)->val[i]);
-	}
 	free((*l)->val);
     free(*l);
     *l= NULL;
@@ -50,7 +45,7 @@ void destroyPoint2D(Point2D **p){
     if ( (*p) == NULL){
         return;
     }
-    free(*p);
+    free((*p));
     *p= NULL;
 }
 
@@ -88,26 +83,26 @@ void destroyPoint2DList(Point2DList **pl){
 //
 Point2DList* newAdjacency4(){
 	Point2DList* pl = createPoint2DList(5);
-	pl->points[0] = createPoint2D(0,0);
-	pl->points[1] = createPoint2D(0,1);
-	pl->points[2] = createPoint2D(1,0);
-	pl->points[3] = createPoint2D(0,-1);
-	pl->points[4] = createPoint2D(-1,0);
+	pushPoint2DList(pl,0,0);
+	pushPoint2DList(pl,0,1);
+	pushPoint2DList(pl,1,0);
+	pushPoint2DList(pl,0,-1);
+	pushPoint2DList(pl,-1,0);
 	return pl;
 }
 
 //
 Point2DList* newAdjacency8(){
-	Point2DList* pl = createPoint2DList(8);
-	pl->points[0] = createPoint2D(0,0);
-	pl->points[1] = createPoint2D(0,1);
-	pl->points[2] = createPoint2D(1,0);
-	pl->points[3] = createPoint2D(0,-1);
-	pl->points[4] = createPoint2D(-1,0);
-	pl->points[5] = createPoint2D(1,1);
-	pl->points[6] = createPoint2D(1,-1);
-	pl->points[7] = createPoint2D(-1,1);
-	pl->points[8] = createPoint2D(-1,-1);
+	Point2DList* pl = createPoint2DList(9);
+	pushPoint2DList(pl,0,0);
+	pushPoint2DList(pl,0,1);
+	pushPoint2DList(pl,1,0);
+	pushPoint2DList(pl,0,-1);
+	pushPoint2DList(pl,-1,0);
+	pushPoint2DList(pl,1,1);
+	pushPoint2DList(pl,1,-1);
+	pushPoint2DList(pl,-1,1);
+	pushPoint2DList(pl,-1,-1);
 	return pl;
 }
 

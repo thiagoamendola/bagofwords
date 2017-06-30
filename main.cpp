@@ -6,9 +6,8 @@ int main(int argc, char **argv) {
 
     Image* image = readImage("obj8__325.pgm");
     Point2DList* intersections = getSuperpixelIntersections(image);
-    printf("MANOOOOO\n");
 
-    printf("%d\n", intersections->size);
+    printf("RESULTS %d/%d\n", intersections->size, image->nx * image->ny);
 
     destroyPoint2DList(&intersections);
     destroyImage(&image);

@@ -6,7 +6,7 @@
 
 typedef struct _intlist{
 	int size;
-	int** val;
+	int* val;
 } IntList;
 
 typedef struct _point2d{
@@ -19,6 +19,8 @@ typedef struct _point2dlist{
 } Point2DList;
 
 
+
+#define imgv(image, x, y) (int)imageVal(image, x, y)
 
 IntList* createIntList(int size);
 void pushIntList(IntList *l, int value);
@@ -35,6 +37,7 @@ Point2DList* newAdjacency4();
 Point2DList* newAdjacency8();
 
 bool isValidMatrixPosition(Image* image, Point2D* center, Point2D* mask);
+
 
 
 #endif
