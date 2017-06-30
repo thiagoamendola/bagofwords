@@ -5,7 +5,7 @@
 #include "libFL/include/FL.h"
 #include "common.h"
 
-#define WORDSPERIMAGE 60
+#define WORDSPERIMAGE 64
 
 bool isSuperpixelIntersection(Image* image, Point2D pixel);
 Point2DList* getSuperpixelIntersections(Image* imgSp);
