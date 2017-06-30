@@ -19,8 +19,10 @@ typedef struct _point2dlist{
 } Point2DList;
 
 
-
+//
 #define imgv(image, x, y) (int)imageVal(image, x, y)
+
+void mts(Matrix* matrix, int i, int j, int value);
 
 IntList* createIntList(int size);
 void pushIntList(IntList *l, int value);

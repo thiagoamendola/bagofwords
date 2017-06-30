@@ -1,8 +1,11 @@
 #include "common.h"
 
 
-
-
+//
+void mts(Matrix* matrix, int i, int j, int value){
+	GVector* g = matrix->matrixData;
+	((int*)g->data)[MATRIX_COMPUTEINDEX(matrix,i,j)] = value;
+}
 
 //
 IntList* createIntList(int size){

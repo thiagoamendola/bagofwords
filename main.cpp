@@ -5,7 +5,7 @@ int main(int argc, char **argv) {
     printf("AE hooo\n");
 
     Image* image = readImage("obj8__325.pgm");
-    Point2DList* intersections = getSuperpixelIntersections(image);
+    Point2DList* intersections = getPointsOfInterest(image);
 
     printf("RESULTS %d/%d\n", intersections->size, image->nx * image->ny);
 
