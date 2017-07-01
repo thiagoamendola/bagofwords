@@ -57,7 +57,7 @@ Point2DList* getSuperpixelIntersections(Image* image){
 	return intersections;
 }
 
-//
+// <- Kernels should be reutilized
 double getGradientFromPixel(Image* image, Point2D* pixelPos){
 	int k, sumx, sumy;
 	double result;
@@ -108,7 +108,7 @@ double getGradientFromPixel(Image* image, Point2D* pixelPos){
 }
 
 //
-Point2DList* getPointsOfInterest(Image* image){
+GVector* getPointsOfInterest(Image* image, BagOfVisualWordsManager* bagOfVisualWordsManager){
 	int k, l;
 	Point2D *intersec;
 	//Obtain the intersections between multiple superpixels
@@ -143,9 +143,20 @@ Point2DList* getPointsOfInterest(Image* image){
 		pushPoint2DList(gradPos, aux->x, aux->y);
 	}
 
-	destroyPoint2DList(&intersections);
+	//Obtain patches around points of interest
+	GVector* vec = createVector(gradPos->size, sizeof(Image*));
+	//vec->freeFunction = destroyImage;
+	vec->size = vec->capacity;
+	for (size_t i = 0; i < vec->size; ++i) {
+		Point2D* pt = gradPos->points[i];
+		int halfSize = (PATCHSIZE-1)/2;
+		VECTOR_GET_ELEMENT_AS(Image*, vec, i) = extractSubImage(image,pt->x-halfSize,pt->y-halfSize,2*halfSize,2*halfSize,true);
+		destroyPoint2D(&pt);
+	}
 
-	return gradPos;
+	destroyPoint2DList(&intersections);
+	destroyPoint2DList(&gradPos);
+	return vec;
 }
 
 

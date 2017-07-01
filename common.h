@@ -19,6 +19,8 @@ typedef struct _point2dlist{
 } Point2DList;
 
 
+
+
 //
 #define imgv(image, x, y) (int)imageVal(image, x, y)
 
@@ -28,8 +30,10 @@ IntList* createIntList(int size);
 void pushIntList(IntList *l, int value);
 void destroyIntList(IntList **l);
 
+
+
 Point2D* createPoint2D(int x, int y);
-void destroyPoint2D(Point2D **p);
+void destroyPoint2D(void* p);
 
 Point2DList* createPoint2DList(int size);
 void pushPoint2DList(Point2DList *l, int x, int y);
@@ -40,6 +44,7 @@ Point2DList* newAdjacency8();
 
 bool isValidMatrixPosition(Image* image, Point2D* center, Point2D* mask);
 
+void destroyImage(void* img);
 
 
 #endif

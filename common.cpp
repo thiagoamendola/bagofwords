@@ -44,7 +44,8 @@ Point2D* createPoint2D(int x, int y){
 }
 
 //
-void destroyPoint2D(Point2D **p){
+void destroyPoint2D(void* pt){
+	Point2D** p = (Point2D**)pt;
     if ( (*p) == NULL){
         return;
     }
@@ -122,4 +123,9 @@ bool isValidMatrixPosition(Image* image, Point2D* center, Point2D* mask){
 		return false;
 	}
 	return true;
+}
+
+void destroyImage(void* img){
+	Image** image = (Image**)img;
+	destroyImage(img);
 }

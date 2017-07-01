@@ -3,7 +3,8 @@
 
 
 ## To Do List
-- Filter only the 64 points of interest with the greatest gradients /////////////
+- Filter only the 64 points of interest with the greatest gradients /////////
+- Extract patches from the points of interest ///////////////////////////////
 - Calculate Purity
 - Use SVM to train data
 - Integrate HoG

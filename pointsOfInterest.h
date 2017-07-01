@@ -6,11 +6,12 @@
 #include "common.h"
 
 #define WORDSPERIMAGE 64
+#define PATCHSIZE 64
 
 bool isSuperpixelIntersection(Image* image, Point2D pixel);
 Point2DList* getSuperpixelIntersections(Image* imgSp);
 double getGradientFromPixel(Image* image, Point2D* pixelPos);
-Point2DList* getPointsOfInterest(Image* image);
+GVector* getPointsOfInterest(Image* image, BagOfVisualWordsManager* bagOfVisualWordsManager);
 
 
 #endif
