@@ -3,7 +3,12 @@
 
 Matrix* HoGDescriptor(GVector* outputSampler, BagOfVisualWordsManager* bagOfVisualWordsManager){
     //Convert each patch in outputSampler into a Mat image
-
+    /*
+    for (size_t i = 0; i < outputSampler->size; ++i) {
+        something = VECTOR_GET_ELEMENT_AS(Image*, outputSampler, i);
+    }
+    */
+	
     //Run HoG
 
     //Convert returned Mat to Matrix* and return
