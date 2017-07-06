@@ -11,3 +11,8 @@ isf_demo/
 Makefile
 
 *.DS_Store
+
+images/**/samples/*.png
+images/**/superpixels/*.png
+images/**/superpixels/*.pgm
+

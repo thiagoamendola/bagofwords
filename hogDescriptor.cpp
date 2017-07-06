@@ -1,19 +1,4 @@
-
-#include "main.h"
-
-//#include <iostream>
-//#include <cmath>
-//#include <opencv2/opencv.hpp>
-//#include <opencv2/highgui/highgui.hpp>
-
-//using namespace std;
-//using namespace cv;
-
-//Parameters
-#define N_BINS 16		   //Number of bins
-#define N_DIVS 3			//Number of cells = N_DIVS*N_DIVS
-#define N_PHOG N_DIVS * N_DIVS * N_BINS
-#define BIN_RANGE (2 * CV_PI) / N_BINS
+#include "hogDescriptor.h"
 
 
 Matrix* HoGDescriptor(GVector* outputSampler, BagOfVisualWordsManager* bagOfVisualWordsManager){
@@ -24,14 +9,16 @@ Matrix* HoGDescriptor(GVector* outputSampler, BagOfVisualWordsManager* bagOfVisu
     //Convert returned Mat to Matrix* and return
 
 }
-/*
+
 //Input: Grayscale image
 //Output: HOG features
-Mat hog(const Mat &Img)
+Mat hog(const Mat &Img, Mat &return_value)
 {
-	Mat Hog;
-	Hog = Mat::zeros(1, N_PHOG, CV_32FC1);
-
+	int scale = 1;
+	int delta = 0;
+	int ddepth = CV_16S;
+	Mat Hog = Mat::zeros(1, N_PHOG, CV_32FC1);
+	Mat accumulated_hog = Mat::zeros(1, N_BINS, CV_32FC1);
 	Mat Ix, Iy;
 
 	float bin_midpoint[N_BINS];
@@ -39,8 +26,10 @@ Mat hog(const Mat &Img)
 		bin_midpoint[i] = i * BIN_RANGE + (BIN_RANGE / 2);
 
 	//Find orientation gradients in x and y directions
-	Sobel(Img, Ix, CV_16S, 1, 0, 3);
-	Sobel(Img, Iy, CV_16S, 0, 1, 3);
+	Sobel(Img, Ix, ddepth, 1, 0, 3, scale, delta, BORDER_DEFAULT);
+	Sobel(Img, Iy, ddepth, 0, 1, 3, scale, delta, BORDER_DEFAULT);
+	// Sobel(Img, Ix, CV_16S, 1, 0, 3);
+	// Sobel(Img, Iy, CV_16S, 0, 1, 3);
 
 	int cellx = Img.cols/N_DIVS;
 	int celly = Img.rows/N_DIVS;
@@ -91,12 +80,12 @@ Mat hog(const Mat &Img)
 					Hog.at<float>(0, (m * N_DIVS + n) * N_BINS + nth_bin) += angle_in_midpoint * norm_grad;
 					if (there_is_neighbor == 1)
 						Hog.at<float>(0, (m * N_DIVS + n) * N_BINS + bin_neighbor) += angle_in_neighbor * norm_grad;
+
 				}
 			 }
 		}
 	}
 
-	Mat accumulated_hog = Mat::zeros(1, N_BINS, CV_32FC1);
 	for (int i = 0; i < N_DIVS * N_DIVS; i++) {
 		for (int j = 0; j < N_BINS; j++) {
 			accumulated_hog.at<float>(0, j) = Hog.at<float>(0, i * N_BINS + j);
@@ -127,6 +116,6 @@ Mat hog(const Mat &Img)
 	//	for (j=0; j<N_BINS; j++)
 	//		Hog.at<float>(0, i * N_BINS + j)/=max;
 	// }
+	return_value = accumulated_hog;
 	return accumulated_hog;
 }
-*/

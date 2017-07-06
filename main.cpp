@@ -3,44 +3,52 @@
 
 int main(int argc, char **argv) {
     /*
-    printf("AE hooo\n");
 
-    Image* image = readImage("obj8__325.pgm");
+    //Image* image = readImage("obj8__325.pgm");
+    Image* image = readImage("images/coil-100/samples/000001_00000793.png");
+    printf("AE ow\n");
     GVector* intersections = getPointsOfInterest(image, NULL);
 
+    printf("eta\n");
     printf("RESULTS %d/%d\n", intersections->size, image->nx * image->ny);
 
     destroyVector(&intersections);
     destroyImage(&image);
     return 0;
     */
-
+///*
     size_t numberOfVisualWords = 500;
 
-    //char const* const fileName_createDict = "/home/deangeli/databases/train_paths.txt";
-    //char const* const fileName_createTrain = "/home/deangeli/databases/train_paths.txt";
-    //char const* const fileName_createTest = "/home/deangeli/databases/test_paths.txt";
+    char const* const fileName_createDict = "images/coil-100/train_paths.txt";
+    char const* const fileName_createTrain = "images/coil-100/train_paths.txt";
+    char const* const fileName_createTest = "images/coil-100/test_paths.txt";
 
-    //GVector* vectorSamplesUsed2CreateDict =  splitsLinesInTextFile(fileName_createDict);
-    //GVector* vectorSamplesUsed2TrainClassifier =  splitsLinesInTextFile(fileName_createTrain);
-    //GVector* vectorSamplesUsed2TestClassifier =  splitsLinesInTextFile(fileName_createTest);
+    GVector* vectorSamplesUsed2CreateDict =  splitsLinesInTextFile(fileName_createDict);
+    GVector* vectorSamplesUsed2TrainClassifier =  splitsLinesInTextFile(fileName_createTrain);
+    GVector* vectorSamplesUsed2TestClassifier =  splitsLinesInTextFile(fileName_createTest);
 
     BagOfVisualWordsManager* bowManager = createBagOfVisualWordsManager();
 
-    //bowManager->pathsToImages_dictionery = vectorSamplesUsed2CreateDict;//criar o dicionario
-    //bowManager->pathsToImages_train = vectorSamplesUsed2TrainClassifier;//treinar o classificador
-    //bowManager->pathsToImages_test = vectorSamplesUsed2TestClassifier;//testar o classificador
+    bowManager->pathsToImages_dictionery = vectorSamplesUsed2CreateDict;
+    bowManager->pathsToImages_train = vectorSamplesUsed2TrainClassifier;
+    bowManager->pathsToImages_test = vectorSamplesUsed2TestClassifier;
 
-    bowManager->imageSamplerFunction = getPointsOfInterest;//ponteiro da funcao para o sampling
-    bowManager->freeFunction2SamplerOutput = destroyImage;
+    //bowManager->imageSamplerFunction = gridSamplingBow;
+    //ArgumentList* gridSamplingArguments = createArgumentList();
+    //ARGLIST_PUSH_BACK_AS(size_t,gridSamplingArguments,64);
+    //ARGLIST_PUSH_BACK_AS(size_t,gridSamplingArguments,64);
+    //bowManager->argumentListOfSampler = gridSamplingArguments;
+    bowManager->imageSamplerFunction = getPointsOfInterest;
 
-    //bowManager->featureExtractorFunction = HoGDescriptor;//ponteiro da funcao para a extracao de features
+    bowManager->freeFunction2SamplerOutput = destroyImageVoidPointer;
+
     bowManager->featureExtractorFunction = computeColorHistogramBow;
     ArgumentList* colorFeatureExtractorArguments = createArgumentList();
     size_t nbins = 7;
     ARGLIST_PUSH_BACK_AS(size_t,colorFeatureExtractorArguments,nbins);
     ARGLIST_PUSH_BACK_AS(size_t,colorFeatureExtractorArguments,nbins*nbins*nbins);
     bowManager->argumentListOfFeatureExtractor = colorFeatureExtractorArguments;
+    //bowManager->featureExtractorFunction = HoGDescriptor;
 
     bowManager->distanceFunction = computeNormalizedL2Norm;
     bowManager->argumentListOfDistanceFunction = NULL;
@@ -55,7 +63,7 @@ int main(int argc, char **argv) {
     ARGLIST_PUSH_BACK_AS(ArgumentList*,clusteringMethodArguments,NULL); //seed
     bowManager->argumentListOfClustering = clusteringMethodArguments;
 
-    ////////////
+    ///////////
     computeDictionery(bowManager);
 
 
@@ -76,38 +84,26 @@ int main(int argc, char **argv) {
 
 
 
-    /*
-    ArgumentList* colorFeatureExtractorArguments = createArgumentList();
-    size_t nbins = 7;
-    ARGLIST_PUSH_BACK_AS(size_t,colorFeatureExtractorArguments,nbins); //nBins per channel
-    ARGLIST_PUSH_BACK_AS(size_t,colorFeatureExtractorArguments,nbins*nbins*nbins); //total number of channels
-    bowManager->argumentListOfFeatureExtractor = colorFeatureExtractorArguments; //passando a lista de argumentos do feature extractor para o bow manager
-    bowManager->distanceFunction = computeNormalizedL1Norm;
-    bowManager->argumentListOfDistanceFunction = NULL;
-    bowManager->clusteringFunction = kmeansClusteringBow;
-    ArgumentList* clusteringMethodArguments = createArgumentList();
-    ARGLIST_PUSH_BACK_AS(size_t,clusteringMethodArguments,numberOfVisualWords); //number of words
-    ARGLIST_PUSH_BACK_AS(size_t,clusteringMethodArguments,100); //maximum number of iterations
-    ARGLIST_PUSH_BACK_AS(double,clusteringMethodArguments,0.0001); //tolerance
-    ARGLIST_PUSH_BACK_AS(int,clusteringMethodArguments,0); //seed
-    ARGLIST_PUSH_BACK_AS(DistanceFunction,clusteringMethodArguments,computeNormalizedL1Norm); //seed
-    ARGLIST_PUSH_BACK_AS(ArgumentList*,clusteringMethodArguments,NULL); //seed
-    bowManager->argumentListOfClustering = clusteringMethodArguments;
-    ///////////////////////////////////////////////////////////////
+
+    //ArgumentList* colorFeatureExtractorArguments = createArgumentList();
+    //size_t nbins = 7;
+    //ARGLIST_PUSH_BACK_AS(size_t,colorFeatureExtractorArguments,nbins); //nBins per channel
+    //ARGLIST_PUSH_BACK_AS(size_t,colorFeatureExtractorArguments,nbins*nbins*nbins); //total number of channels
+    //bowManager->argumentListOfFeatureExtractor = colorFeatureExtractorArguments; //passando a lista de argumentos do feature extractor para o bow manager
+    //bowManager->distanceFunction = computeNormalizedL1Norm;
+    //bowManager->argumentListOfDistanceFunction = NULL;
+    //bowManager->clusteringFunction = kmeansClusteringBow;
+    //ArgumentList* clusteringMethodArguments = createArgumentList();
+    //ARGLIST_PUSH_BACK_AS(size_t,clusteringMethodArguments,numberOfVisualWords); //number of words
+    //ARGLIST_PUSH_BACK_AS(size_t,clusteringMethodArguments,100); //maximum number of iterations
+    //ARGLIST_PUSH_BACK_AS(double,clusteringMethodArguments,0.0001); //tolerance
+    //ARGLIST_PUSH_BACK_AS(int,clusteringMethodArguments,0); //seed
+    //ARGLIST_PUSH_BACK_AS(DistanceFunction,clusteringMethodArguments,computeNormalizedL1Norm); //seed
+    //ARGLIST_PUSH_BACK_AS(ArgumentList*,clusteringMethodArguments,NULL); //seed
+    //bowManager->argumentListOfClustering = clusteringMethodArguments;
+    /////////////////////////////////////////////////////////////////
 
 
-    //SVM Classifier
-    SVM_Classifier* classifiersvm = createSVMClassifier();
-    classifiersvm->param.kernel_type = RBF;
-    classifiersvm->param.gamma = 3.5;
-    bowManager->classifier = (void*)classifiersvm;
-    bowManager->fitFunction = svm_Classifier_fit;
-    bowManager->storeTrainData = false;
-    bowManager->predictFunction = svm_Classifier_predict;
-    bowManager->storePredictedData = false;
-    bowManager->freeFunctionClassifier = destroySVMClassifierForVoidPointer;
-
-    */
     trainClassifier(bowManager);
     GVector* labelsPredicted = predictLabels(bowManager);
 
@@ -139,4 +135,5 @@ int main(int argc, char **argv) {
     destroyVector(&labelsPredicted);
     destroyBagOfVisualWordsManager(&bowManager);
     return 0;
+    //*/
 }

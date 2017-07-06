@@ -77,7 +77,8 @@ void destroyPoint2DList(Point2DList **pl){
         return;
     }
 	for(int i=0; i<(*pl)->size; i++){
-		destroyPoint2D(&((*pl)->points[i]));
+		if ( ((*pl)->points[i]) != NULL)
+			destroyPoint2D(&((*pl)->points[i]));
 	}
 	free((*pl)->points);
     free(*pl);

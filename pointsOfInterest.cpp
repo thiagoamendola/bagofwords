@@ -107,12 +107,42 @@ double getGradientFromPixel(Image* image, Point2D* pixelPos){
 	return result;
 }
 
+char oldcounter[20]="";
+
 //
 GVector* getPointsOfInterest(Image* image, BagOfVisualWordsManager* bagOfVisualWordsManager){
-	int k, l;
+	int k, l, auxCnt;
 	Point2D *intersec;
+	GVector* vec;
+	Image* superpixels;
+	//Load equivalent superpixel image
+	char *filename = strrchr(image->filename,'/')+1;
+	char file[200];
+	strncpy(file, filename, strlen(filename) - 4);
+	char fullpath[100];
+	strncpy(fullpath, image->filename, strlen(image->filename) - strlen(filename)-1-strlen("/samples"));
+	char *folder = fullpath + strlen(fullpath) - 1;
+	auxCnt = 0;
+	while(auxCnt<2){
+		if((*folder)=='/'){
+			auxCnt++;
+		}
+		if(auxCnt<2)
+			folder = folder-1;
+	}
+	folder += 1;
+	char sppath[200];
+	snprintf(sppath, sizeof(sppath), "%s/superpixels/%s.pgm", folder,file);
+	superpixels = readImagePGM(sppath);
+	//Print
+	char counter[10];
+	strncpy(counter, strrchr(image->filename,'_')-3, 3);
+	if(strcmp(counter, oldcounter)!=0){
+		printf("-> class %s/100\n", counter);
+		strcpy(oldcounter, counter);
+	}
 	//Obtain the intersections between multiple superpixels
-	Point2DList* intersections = getSuperpixelIntersections(image);
+	Point2DList* intersections = getSuperpixelIntersections(superpixels);
 	double gradients[intersections->size];
 	//Get gradients
 	for(k=0; k<intersections->size; k++){
@@ -144,18 +174,20 @@ GVector* getPointsOfInterest(Image* image, BagOfVisualWordsManager* bagOfVisualW
 	}
 
 	//Obtain patches around points of interest
-	GVector* vec = createVector(gradPos->size, sizeof(Image*));
-	//vec->freeFunction = destroyImage;
+	vec = createVector(gradPos->size, sizeof(Image*));
+	vec->freeFunction = destroyImageVoidPointer;
 	vec->size = vec->capacity;
 	for (size_t i = 0; i < vec->size; ++i) {
 		Point2D* pt = gradPos->points[i];
 		int halfSize = (PATCHSIZE-1)/2;
 		VECTOR_GET_ELEMENT_AS(Image*, vec, i) = extractSubImage(image,pt->x-halfSize,pt->y-halfSize,2*halfSize,2*halfSize,true);
-		destroyPoint2D(&pt);
+		//destroyPoint2D(&pt);
 	}
 
+	destroyImage(&superpixels);
 	destroyPoint2DList(&intersections);
 	destroyPoint2DList(&gradPos);
+
 	return vec;
 }
 

@@ -8,6 +8,7 @@
 #include "libFL/include/FL.h"
 #include "common.h"
 #include "pointsOfInterest.h"
+#include "hogDescriptor.h"
 
 
 #endif
