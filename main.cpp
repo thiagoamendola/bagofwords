@@ -19,9 +19,9 @@ int main(int argc, char **argv) {
 ///*
     size_t numberOfVisualWords = 500;
 
-    char const* const fileName_createDict = "images/coil-100/train_paths.txt";
-    char const* const fileName_createTrain = "images/coil-100/train_paths.txt";
-    char const* const fileName_createTest = "images/coil-100/test_paths.txt";
+    char const* const fileName_createDict = "images/corel/train_paths.txt";
+    char const* const fileName_createTrain = "images/corel/train_paths.txt";
+    char const* const fileName_createTest = "images/corel/test_paths.txt";
 
     GVector* vectorSamplesUsed2CreateDict =  splitsLinesInTextFile(fileName_createDict);
     GVector* vectorSamplesUsed2TrainClassifier =  splitsLinesInTextFile(fileName_createTrain);
@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
     //ARGLIST_PUSH_BACK_AS(size_t,gridSamplingArguments,64);
     //ARGLIST_PUSH_BACK_AS(size_t,gridSamplingArguments,64);
     //bowManager->argumentListOfSampler = gridSamplingArguments;
-    bowManager->imageSamplerFunction = getPointsOfInterest;
+    bowManager->imageSamplerFunction = getPointsOfInterest; //Comment this and uncomment the lines above to test other configurations
 
     bowManager->freeFunction2SamplerOutput = destroyImageVoidPointer;
 
@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
     //ARGLIST_PUSH_BACK_AS(size_t,colorFeatureExtractorArguments,nbins);
     //ARGLIST_PUSH_BACK_AS(size_t,colorFeatureExtractorArguments,nbins*nbins*nbins);
     //bowManager->argumentListOfFeatureExtractor = colorFeatureExtractorArguments;
-    bowManager->featureExtractorFunction = HoGDescriptor;
+    bowManager->featureExtractorFunction = HoGDescriptor; //Comment this and uncomment the lines above to test other configurations
 
     bowManager->distanceFunction = computeNormalizedL2Norm;
     bowManager->argumentListOfDistanceFunction = NULL;

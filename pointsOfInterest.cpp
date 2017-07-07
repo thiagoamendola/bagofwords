@@ -120,7 +120,7 @@ GVector* getPointsOfInterest(Image* image, BagOfVisualWordsManager* bagOfVisualW
 	char file[200];
 	strncpy(file, filename, strlen(filename) - 4);
 	char fullpath[100];
-	strncpy(fullpath, image->filename, strlen(image->filename) - strlen(filename)-1-strlen("/samples"));
+	strncpy(fullpath, image->filename, strlen(image->filename) - strlen(filename)-0);
 	char *folder = fullpath + strlen(fullpath) - 1;
 	auxCnt = 0;
 	while(auxCnt<2){
@@ -132,13 +132,13 @@ GVector* getPointsOfInterest(Image* image, BagOfVisualWordsManager* bagOfVisualW
 	}
 	folder += 1;
 	char sppath[200];
-	snprintf(sppath, sizeof(sppath), "%s/superpixels/%s.pgm", folder,file);
+	snprintf(sppath, sizeof(sppath), "%s/superpixels/%s.pgm", "images/corel",file);
 	superpixels = readImagePGM(sppath);
 	//Print
 	char counter[10];
 	strncpy(counter, strrchr(image->filename,'_')-3, 3);
 	if(strcmp(counter, oldcounter)!=0){
-		printf("-> class %s/100\n", counter);
+		printf("-> class %s/10\n", counter);
 		strcpy(oldcounter, counter);
 	}
 	//Obtain the intersections between multiple superpixels
