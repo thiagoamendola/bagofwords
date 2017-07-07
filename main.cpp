@@ -42,13 +42,13 @@ int main(int argc, char **argv) {
 
     bowManager->freeFunction2SamplerOutput = destroyImageVoidPointer;
 
-    bowManager->featureExtractorFunction = computeColorHistogramBow;
-    ArgumentList* colorFeatureExtractorArguments = createArgumentList();
-    size_t nbins = 7;
-    ARGLIST_PUSH_BACK_AS(size_t,colorFeatureExtractorArguments,nbins);
-    ARGLIST_PUSH_BACK_AS(size_t,colorFeatureExtractorArguments,nbins*nbins*nbins);
-    bowManager->argumentListOfFeatureExtractor = colorFeatureExtractorArguments;
-    //bowManager->featureExtractorFunction = HoGDescriptor;
+    //bowManager->featureExtractorFunction = computeColorHistogramBow;
+    //ArgumentList* colorFeatureExtractorArguments = createArgumentList();
+    //size_t nbins = 7;
+    //ARGLIST_PUSH_BACK_AS(size_t,colorFeatureExtractorArguments,nbins);
+    //ARGLIST_PUSH_BACK_AS(size_t,colorFeatureExtractorArguments,nbins*nbins*nbins);
+    //bowManager->argumentListOfFeatureExtractor = colorFeatureExtractorArguments;
+    bowManager->featureExtractorFunction = HoGDescriptor;
 
     bowManager->distanceFunction = computeNormalizedL2Norm;
     bowManager->argumentListOfDistanceFunction = NULL;

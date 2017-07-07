@@ -25,11 +25,11 @@ using namespace cv;
 #define N_BINS 16		   //Number of bins
 #define N_DIVS 3			//Number of cells = N_DIVS*N_DIVS
 #define N_PHOG N_DIVS * N_DIVS * N_BINS
-#define BIN_RANGE (2 * CV_PI) / N_BINS
+#define BIN_RANGE 2 * (CV_PI) / N_BINS
+#define RETURN_HOG
+// #define RETURN_ACC
 
-
-
-Mat hog(const Mat &Img, Mat &return_value);
+Mat hog(const Mat &Img);
 Matrix* HoGDescriptor(GVector* outputSampler, BagOfVisualWordsManager* bagOfVisualWordsManager);
 
 
